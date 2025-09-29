@@ -17,6 +17,7 @@ st.set_page_config(page_title="Fake Image Detector", page_icon=img, initial_side
 st.header("Deepfake Image Detection Tool")
 
 with st.sidebar:
+  st.image("img/detector.png")
   st.write("---")
   st.title("About")
   st.write(
