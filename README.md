@@ -10,7 +10,7 @@ Check out the code of the project by clicking [here](https://github.com/TarunSeh
 - Custom-built deep learning model for binary classification (Real/Fake)
 - User-friendly web interface powered by Streamlit
 - Real-time image analysis and prediction
-- Model stored in H5 format for efficient deployment
+- Model stored in .pt format for efficient deployment
   
 
 ## How to run
@@ -29,6 +29,5 @@ streamlit run app.py
 ## Tech Stack
 - **Frontend:** Streamlit
 - **Backend:** Python
-- **Model Format:** HDF5 (.h5)
-- **Deep Learning Framework:** TensorFlow/Keras
+- **Deep Learning Framework:** Pytorch
 
