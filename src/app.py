@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import numpy as np
 import cv2
@@ -5,6 +6,8 @@ import torch
 import torch.nn as nn
 from torchvision import transforms
 from PIL import Image
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Import model architecture from separate file (keep that file private)
 try:
@@ -87,7 +90,8 @@ def predict_image(model, image, device):
         return None, None, None, None
 
 # Page Configuration
-img = Image.open("img/page_icon.jfif") if st.file_uploader else None
+img_path = os.path.join(BASE_DIR, "img", "page_icon.jfif")
+img = Image.open(img_path)
 st.set_page_config(
     page_title="Fake Image Detector", 
     page_icon=img, 
@@ -125,7 +129,7 @@ with st.sidebar:
     )
 
 # Model Loading
-MODEL_PATH = "models/deepfake_model.pt"  # Change this to your model path
+MODEL_PATH = os.path.join(BASE_DIR, "models", "deepfake_model.pt")
 
 try:
     model, device = load_pytorch_model(MODEL_PATH)
@@ -205,7 +209,8 @@ st.write(
 
 st.subheader("Model Training Graph")
 try:
-    st.image("img/model_accuracy.png")
+    model_graph_path = os.path.join(BASE_DIR, "img", "model_accuracy.png")
+    st.image(model_graph_path)
     st.markdown("**Model Accuracy: 88%**")
 except:
     st.info("Model training graph not available")
