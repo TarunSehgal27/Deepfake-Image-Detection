@@ -103,7 +103,8 @@ st.header("Deepfake Image Detection Tool")
 # Sidebar
 with st.sidebar:
     try:
-        st.image("img/detector.png")
+        side_img = os.path.join(BASE_DIR, "img", "detector.png")
+        st.image(side_img)
     except:
         st.write("🔍 Deepfake Detector")
     
