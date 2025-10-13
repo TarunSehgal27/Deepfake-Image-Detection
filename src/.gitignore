@@ -1,1 +1,4 @@
 model_architecture.py
+encoded_architecture.py
+encoded_architecture.txt
+.streamlit/secrets.toml

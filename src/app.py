@@ -6,16 +6,47 @@ import torch
 import torch.nn as nn
 from torchvision import transforms
 from PIL import Image
+import os
+import base64
+import importlib.util
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Import model architecture from separate file (keep that file private)
-try:
-    from model_architecture import get_model
-    MODEL_ARCHITECTURE_AVAILABLE = True
-except ImportError:
-    MODEL_ARCHITECTURE_AVAILABLE = False
-    st.error("⚠️ model_architecture.py not found. Please create this file with your model definition.")
+#try:
+#    from model_architecture import get_model
+#    MODEL_ARCHITECTURE_AVAILABLE = True
+#except ImportError:
+#    MODEL_ARCHITECTURE_AVAILABLE = False
+#    st.error("⚠️ model_architecture.py not found. Please create this file with your model definition.")
+
+def load_model_architecture():
+    """Securely load model architecture from Streamlit secrets or local file"""
+    try:
+        # Try to load from Streamlit secrets (for deployment)
+        if "model" in st.secrets and "architecture" in st.secrets["model"]:
+            encoded_arch = st.secrets["model"]["architecture"]
+            decoded_arch = base64.b64decode(encoded_arch).decode()
+            
+            # Create a temporary module from the decoded code
+            spec = importlib.util.spec_from_loader("model_architecture", loader=None)
+            model_arch_module = importlib.util.module_from_spec(spec)
+            
+            # Execute the decoded architecture code
+            exec(decoded_arch, model_arch_module.__dict__)
+            
+            return model_arch_module.get_model
+        else:
+            # Fallback to local file (for local development)
+            from model_architecture import get_model
+            return get_model
+    except Exception as e:
+        st.error(f"Error loading model architecture: {str(e)}")
+        return None
+
+get_model = load_model_architecture()
+MODEL_ARCHITECTURE_AVAILABLE = get_model is not None
 
 @st.cache_resource
 def load_pytorch_model(model_path):
